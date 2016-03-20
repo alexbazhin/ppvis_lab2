@@ -1,13 +1,13 @@
 package View;
 
-import Model.Student;
-
+import Controller.OkAdd;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AddView {
+
+public class AddView extends JFrame {
 
     public JTextField nameOfStudentField;
     JTextField omissionsField;
@@ -20,8 +20,8 @@ public class AddView {
         super();
     }
 
-    public JFrame createFrame(String name) {
-        JFrame frame = new JFrame();
+    public JDialog createFrame(String name) {
+        JDialog dialog = new JDialog();
         Box mainBox = Box.createVerticalBox();
         Box nameAndBirth = Box.createHorizontalBox();
         Box enteringAndGraduate = Box.createHorizontalBox();
@@ -39,14 +39,7 @@ public class AddView {
         ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String name = getName();
-                String group = getGroup();
-                String omissionsDisease = getOmissionsDisease();
-                String omissionsOtherCauses = getOmissionsOtherCauses();
-                String omissionsWithoutGoodReasonField = getOmissionsWithoutGoodReason();
-                String omissions = getOmissions();
-                Student student = new Student(name, group, omissionsDisease, omissionsOtherCauses, omissionsWithoutGoodReasonField, omissions);
-                Student.students.add(student);
+                new OkAdd().addStudent(getFullName(), getGroup(), getOmissionsDisease(), getOmissionsOtherCauses(), getOmissionsWithoutGoodReason(), getOmissions());
             }
         });
 
@@ -59,11 +52,11 @@ public class AddView {
         mainBox.add(enteringAndGraduate);
         mainBox.add(Box.createHorizontalStrut(12));
         mainBox.add(ok);
-        frame.setContentPane(mainBox);
-        frame.pack();
-        frame.setName(name);
+        dialog.setContentPane(mainBox);
+        dialog.pack();
+        dialog.setName(name);
 
-        return frame;
+        return dialog;
     }
 
     private Box group() {
@@ -114,7 +107,7 @@ public class AddView {
         return omissions;
     }
 
-    public String getName() {
+    public String getFullName() {
         return nameOfStudentField.getText();
     }
 

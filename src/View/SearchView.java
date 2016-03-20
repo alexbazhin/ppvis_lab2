@@ -1,5 +1,6 @@
 package View;
 
+import Controller.OkSearch;
 import Model.Student;
 
 import javax.swing.*;
@@ -22,8 +23,8 @@ public class SearchView {
         super();
     }
 
-    public JFrame createFrame(String name) {
-        JFrame frame = new JFrame();
+    public JDialog createFrame(String name) {
+        JDialog dialog = new JDialog();
         Box mainBox = Box.createVerticalBox();
         Box nameAndBirth = Box.createHorizontalBox();
         Box enteringAndGraduate = Box.createHorizontalBox();
@@ -38,15 +39,15 @@ public class SearchView {
 
         JButton ok = new JButton("OK");
         ok.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+
         ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String name = getName();
+                //new OkSearch().searchStudent(getFullName(), getGroup(), (String) omissionsComboBox.getSelectedItem(), tableStudents, (Integer) lowerLimit.getSelectedItem(), (Integer) upperLimit.getSelectedItem());
+                String name = getFullName();
                 String group = getGroup();
-                String omissionsDisease = getOmissionsDisease();
-                /*String omissionsOtherCauses = getOmissionsOtherCauses();
-                String omissionsWithoutGoodReasonField = getOmissionsWithoutGoodReason();*/
-                /*String omissions = getOmissions();*/
+                String typeOmissions = (String) omissionsComboBox.getSelectedItem();
+                int column=0;
 
                 if (name!=null && group!=null) {
                     for (int i=0; i<tableStudents.getRowCount(); i++) {
@@ -55,12 +56,9 @@ public class SearchView {
                             tableStudents.setRowSelectionInterval(i, i);
                         }
                     }
-
                 }
 
                 if (name != null && group == null) {
-                    String typeOmissions = (String) omissionsComboBox.getSelectedItem();
-                    int column=0;
 
                     if (typeOmissions.equals("Пропуски по болезни")) {column=2;}
                     if (typeOmissions.equals("Пропуски по другим причинам")) {column=3;}
@@ -72,13 +70,9 @@ public class SearchView {
                             tableStudents.setRowSelectionInterval(i, i);
                         }
                     }
-
                 }
 
                 if (name != null && group == null) {
-
-                    String typeOmissions = (String) omissionsComboBox.getSelectedItem();
-                    int column=0;
 
                     if (typeOmissions.equals("Пропуски по болезни")) {column=2;}
                     if (typeOmissions.equals("Пропуски по другим причинам")) {column=3;}
@@ -113,11 +107,11 @@ public class SearchView {
         mainBox.add(scrollPane);
         mainBox.add(ok);
 
-        frame.setContentPane(mainBox);
-        frame.pack();
-        frame.setName(name);
+        dialog.setContentPane(mainBox);
+        dialog.pack();
+        dialog.setName(name);
 
-        return frame;
+        return dialog;
     }
 
     private Box group() {
@@ -181,27 +175,11 @@ public class SearchView {
         return omissions;
     }
 
-    public String getName() {
+    public String getFullName() {
         return nameOfStudentField.getText();
     }
 
     public String getGroup() {
         return numberOfGroupField.getText();
     }
-
-    public String getOmissionsDisease() {
-        return omissionsDiseaseField.getText();
-    }
-
-   /* public String getOmissionsOtherCauses() {
-        return omissionsOtherCausesField.getText();
-    }
-
-    public String getOmissionsWithoutGoodReason() {
-        return omissionsWithoutGoodReasonField.getText();
-    }*/
-
-   /* public String getOmissions() {
-      *//*  return omissionsField.getText();*//*
-    }*/
 }

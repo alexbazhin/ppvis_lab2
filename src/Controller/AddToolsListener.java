@@ -13,10 +13,9 @@ public class AddToolsListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JFrame addView = new AddView().createFrame("PPVIS-2");
+        JDialog addView = new AddView().createFrame("PPVIS-2");
         addView.setSize(850, 500);
         addView.setVisible(true);
         addView.setLocationRelativeTo(null);
-
     }
 }

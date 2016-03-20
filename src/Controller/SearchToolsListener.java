@@ -14,7 +14,7 @@ public class SearchToolsListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JFrame searchView = new SearchView().createFrame("PPVIS-2");
+        JDialog searchView = new SearchView().createFrame("PPVIS-2");
         searchView.setSize(850, 500);
         searchView.setVisible(true);
         searchView.setLocationRelativeTo(null);

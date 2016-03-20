@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 public class DeleteToolsListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
-        JFrame deleteView = new DeleteView().createFrame("PPVIS-2");
+        JDialog deleteView = new DeleteView().createFrame("PPVIS-2");
         deleteView.setSize(850, 500);
         deleteView.setVisible(true);
         deleteView.setLocationRelativeTo(null);

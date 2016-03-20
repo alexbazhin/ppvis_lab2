@@ -4,7 +4,6 @@ import Model.Student;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -24,8 +23,8 @@ public class DeleteView {
         super();
     }
 
-    public JFrame createFrame(String name) {
-        JFrame frame = new JFrame();
+    public JDialog createFrame(String name) {
+        JDialog dialog = new JDialog();
         Box mainBox = Box.createVerticalBox();
         Box nameAndBirth = Box.createHorizontalBox();
         Box enteringAndGraduate = Box.createHorizontalBox();
@@ -53,17 +52,9 @@ public class DeleteView {
                 if (name!=null && group!=null) {
                     for (int i=0; i<tableStudents.getRowCount(); i++) {
                         if (name.equals(tableStudents.getValueAt(i, 0)) && group.equals(tableStudents.getValueAt(i, 1))) {
-                            Student student = new Student("", "", "", "", "", "");
-                            Student.students.set(i,student);
-                            /*model.removeRow(i);*/
-                            model.model(Student.students);
                             TableStudents model = new TableStudents(Student.students);
-
+                            model.removeRow(i);
                             tableStudents = new JTable(model);
-                            /*tableStudents.removeRowSelectionInterval(i,i);*/
-                            for (i=0; i<Student.students.size(); i++) {
-                                System.out.println(Student.students.get(i).getFullName());
-                            }
                         }
                     }
 
@@ -79,11 +70,11 @@ public class DeleteView {
 
                     for (int i=0; i<tableStudents.getRowCount(); i++) {
                         if (name.equals(tableStudents.getValueAt(i, 0))) {
-                            tableStudents.setColumnSelectionInterval(0, column);
-                            tableStudents.setRowSelectionInterval(i, i);
+                            TableStudents model = new TableStudents(Student.students);
+                            model.removeRow(i);
+                            tableStudents = new JTable(model);
                         }
                     }
-
                 }
 
                 if (name != null && group == null) {
@@ -102,8 +93,9 @@ public class DeleteView {
                         if (name.equals(tableStudents.getValueAt(i, 0))) {
                             int value = (Integer) tableStudents.getValueAt(i, column);
                             if (value>lowerLim && value<upperLim) {
-                                tableStudents.setColumnSelectionInterval(0, column);
-                                tableStudents.setRowSelectionInterval(i, i);
+                                TableStudents model = new TableStudents(Student.students);
+                                model.removeRow(i);
+                                tableStudents = new JTable(model);
                             }
                         }
                     }
@@ -124,11 +116,11 @@ public class DeleteView {
         mainBox.add(scrollPane);
         mainBox.add(ok);
 
-        frame.setContentPane(mainBox);
-        frame.pack();
-        frame.setName(name);
+        dialog.setContentPane(mainBox);
+        dialog.pack();
+        dialog.setName(name);
 
-        return frame;
+        return dialog;
     }
 
     private Box group() {
@@ -204,15 +196,4 @@ public class DeleteView {
         return omissionsDiseaseField.getText();
     }
 
-   /* public String getOmissionsOtherCauses() {
-        return omissionsOtherCausesField.getText();
-    }
-
-    public String getOmissionsWithoutGoodReason() {
-        return omissionsWithoutGoodReasonField.getText();
-    }*/
-
-   /* public String getOmissions() {
-      *//*  return omissionsField.getText();*//*
-    }*/
 }

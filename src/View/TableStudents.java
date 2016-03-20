@@ -51,9 +51,10 @@ public class TableStudents extends AbstractTableModel {
         }
     }
 
-    /*public void removeRow(int row) {
-        Student.students.set(row, null);
-    }*/
+    public void removeRow(int i)
+    {
+        students.remove(i);
+    }
 
     @Override
     public Object getValueAt(int r, int c) {
