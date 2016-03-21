@@ -11,8 +11,7 @@ import java.util.List;
 public class TableStudents extends AbstractTableModel {
 
     List<Student> students;
-    TableStudents() {
-    }
+
     TableStudents(List<Student> students) {
         super();
         this.students = students;
@@ -57,7 +56,7 @@ public class TableStudents extends AbstractTableModel {
     }
 
     @Override
-    public Object getValueAt(int r, int c) {
+    public String getValueAt(int r, int c) {
         switch (c) {
             case 0:
                 return Student.students.get(r).getFullName();
@@ -75,6 +74,5 @@ public class TableStudents extends AbstractTableModel {
                 return "";
         }
     }
-
 }
 

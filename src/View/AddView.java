@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 public class AddView extends JFrame {
 
     public JTextField nameOfStudentField;
-    JTextField omissionsField;
     JTextField omissionsWithoutGoodReasonField;
     JTextField omissionsOtherCausesField;
     JTextField omissionsDiseaseField;
@@ -39,13 +38,12 @@ public class AddView extends JFrame {
         ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new OkAdd().addStudent(getFullName(), getGroup(), getOmissionsDisease(), getOmissionsOtherCauses(), getOmissionsWithoutGoodReason(), getOmissions());
+                new OkAdd().addStudent(getFullName(), getGroup(), getOmissionsDisease(), getOmissionsOtherCauses(), getOmissionsWithoutGoodReason());
             }
         });
 
         mainBox.add(nameAndBirth);
         mainBox.add(Box.createVerticalStrut(12));
-        mainBox.add(omissions());
         mainBox.add(Box.createVerticalStrut(12));
         mainBox.add(omissionsDisease());
         mainBox.add(Box.createVerticalStrut(12));
@@ -99,14 +97,6 @@ public class AddView extends JFrame {
         return omissionsWithoutGoodReason;
     }
 
-    private Box omissions() {
-        Box omissions = Box.createHorizontalBox();
-        omissions.setBorder(new TitledBorder("Все пропуски"));
-        omissionsField = new JTextField(20);
-        omissions.add(omissionsField);
-        return omissions;
-    }
-
     public String getFullName() {
         return nameOfStudentField.getText();
     }
@@ -127,7 +117,4 @@ public class AddView extends JFrame {
         return omissionsWithoutGoodReasonField.getText();
     }
 
-    public String getOmissions() {
-        return omissionsField.getText();
-    }
 }

@@ -11,13 +11,13 @@ public class DeleteView {
 
     public JTextField nameOfStudentField;
     JComboBox omissionsComboBox;
-    JComboBox upperLimit;
-    JComboBox lowerLimit;
+    JTextField upperLimit;
+    JTextField lowerLimit;
     JTextField omissionsDiseaseField;
     JTextField numberOfGroupField;
-    TableStudents model = new TableStudents(Student.students);
+    TableStudents tableModel = new TableStudents(Student.students);
 
-    JTable tableStudents = new JTable(model);
+    JTable tableStudents = new JTable(tableModel);
 
     public DeleteView() {
         super();
@@ -44,32 +44,30 @@ public class DeleteView {
             public void actionPerformed(ActionEvent e) {
                 String name = getName();
                 String group = getGroup();
-                String omissionsDisease = getOmissionsDisease();
-                /*String omissionsOtherCauses = getOmissionsOtherCauses();
-                String omissionsWithoutGoodReasonField = getOmissionsWithoutGoodReason();*/
-                /*String omissions = getOmissions();*/
 
-                if (name!=null && group!=null) {
+                String typeOmissions = (String) omissionsComboBox.getSelectedItem();
+
+                int column=0;
+                if (name != null && group != null) {
+                    TableStudents model = new TableStudents(Student.students);
                     for (int i=0; i<tableStudents.getRowCount(); i++) {
                         if (name.equals(tableStudents.getValueAt(i, 0)) && group.equals(tableStudents.getValueAt(i, 1))) {
-                            TableStudents model = new TableStudents(Student.students);
                             model.removeRow(i);
-                            tableStudents = new JTable(model);
+                            //tableStudents = new JTable(model);
                         }
                     }
 
                 }
 
-                if (name != null && group == null) {
-                    String typeOmissions = (String) omissionsComboBox.getSelectedItem();
-                    int column=0;
+                if (name != null && (group == null || group.equals("")) && !typeOmissions.equals("Выберите вид пропуска") && Integer.parseInt(lowerLimit.getText())==0 && Integer.parseInt(upperLimit.getText())==0) {
 
                     if (typeOmissions.equals("Пропуски по болезни")) {column=2;}
                     if (typeOmissions.equals("Пропуски по другим причинам")) {column=3;}
                     if (typeOmissions.equals("Пропуски без уважительной причины")) {column=4;}
 
                     for (int i=0; i<tableStudents.getRowCount(); i++) {
-                        if (name.equals(tableStudents.getValueAt(i, 0))) {
+                        int value = Integer.parseInt(tableModel.getValueAt(i, column));
+                        if (name.equals(tableStudents.getValueAt(i, 0)) && value > 0) {
                             TableStudents model = new TableStudents(Student.students);
                             model.removeRow(i);
                             tableStudents = new JTable(model);
@@ -77,22 +75,19 @@ public class DeleteView {
                     }
                 }
 
-                if (name != null && group == null) {
-
-                    String typeOmissions = (String) omissionsComboBox.getSelectedItem();
-                    int column=0;
+                if (name != null && lowerLimit.getText()!=null && upperLimit.getText()!=null && (group == null || group.equals("")) && Integer.parseInt(lowerLimit.getText())>=0 && Integer.parseInt(upperLimit.getText())>0) {
 
                     if (typeOmissions.equals("Пропуски по болезни")) {column=2;}
                     if (typeOmissions.equals("Пропуски по другим причинам")) {column=3;}
                     if (typeOmissions.equals("Пропуски без уважительной причины")) {column=4;}
 
-                    int lowerLim = (Integer) lowerLimit.getSelectedItem();
-                    int upperLim = (Integer) upperLimit.getSelectedItem();
+                    int lowerLim = Integer.parseInt(lowerLimit.getText());
+                    int upperLim = Integer.parseInt(upperLimit.getText());
 
                     for (int i=0; i<tableStudents.getRowCount(); i++) {
                         if (name.equals(tableStudents.getValueAt(i, 0))) {
-                            int value = (Integer) tableStudents.getValueAt(i, column);
-                            if (value>lowerLim && value<upperLim) {
+                            int value = Integer.parseInt(tableModel.getValueAt(i, column));
+                            if (value>lowerLim && value<=upperLim) {
                                 TableStudents model = new TableStudents(Student.students);
                                 model.removeRow(i);
                                 tableStudents = new JTable(model);
@@ -106,8 +101,6 @@ public class DeleteView {
         mainBox.add(nameAndBirth);
         mainBox.add(Box.createVerticalStrut(12));
         mainBox.add(omissions());
-        mainBox.add(Box.createVerticalStrut(12));
-        mainBox.add(omissionsDisease());
         mainBox.add(Box.createVerticalStrut(12));
         mainBox.add(enteringAndGraduate);
         mainBox.add(Box.createHorizontalStrut(12));
@@ -139,24 +132,11 @@ public class DeleteView {
         return fullName;
     }
 
-    private Box omissionsDisease() {
-        Box omissionsDisease = Box.createHorizontalBox();
-        omissionsDisease.setBorder(new TitledBorder("Пропуски по болезни"));
-        omissionsDiseaseField = new JTextField(20);
-        omissionsDisease.add(omissionsDiseaseField);
-        return omissionsDisease;
-    }
-
     private Box omissionsOtherCauses() {
         Box omissionsOtherCauses = Box.createHorizontalBox();
         omissionsOtherCauses.setBorder(new TitledBorder("Нижний предел"));
-
-        String[] items = new String[30];
-        for (int i=0; i<30; i++) {
-            items[i]=Integer.toString(i);
-        }
-        lowerLimit = new JComboBox(items);
-
+        lowerLimit = new JTextField(20);
+        lowerLimit.setText("0");
         omissionsOtherCauses.add(lowerLimit);
         return omissionsOtherCauses;
     }
@@ -164,11 +144,8 @@ public class DeleteView {
     private Box omissionsWithoutGoodReason() {
         Box omissionsWithoutGoodReason = Box.createHorizontalBox();
         omissionsWithoutGoodReason.setBorder(new TitledBorder("Верхний предел"));
-        String[] items = new String[30];
-        for (int i=0; i<30; i++) {
-            items[i]=Integer.toString(i);
-        }
-        upperLimit = new JComboBox(items);
+        upperLimit = new JTextField(20);
+        upperLimit.setText("0");
         omissionsWithoutGoodReason.add(upperLimit);
         return omissionsWithoutGoodReason;
     }
@@ -177,6 +154,7 @@ public class DeleteView {
         Box omissions = Box.createHorizontalBox();
         omissions.setBorder(new TitledBorder("Вид пропуска"));
         omissionsComboBox = new JComboBox();
+        omissionsComboBox.addItem("Выберите вид пропуска");
         omissionsComboBox.addItem("Пропуски по болезни");
         omissionsComboBox.addItem("Пропуски по другим причинам");
         omissionsComboBox.addItem("Пропуски без уважительной причины");
