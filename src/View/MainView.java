@@ -2,7 +2,6 @@ package View;
 
 import Controller.*;
 import Model.Student;
-
 import javax.swing.*;
 
 /**
@@ -15,12 +14,14 @@ public class MainView {
     JMenuItem newFile;
     JMenuItem openFile;
     JMenuItem exitFrame;
+    JMenuItem saveFile;
 
     JMenu toolsMenu;
     JMenuItem searchTools;
     JMenuItem deleteTools;
     JMenuItem addTools;
     JTable tableStudents = new JTable(new TableStudents(Student.students));
+    Parser theParser = new Parser(Student.students, tableStudents);
 
     public MainView() {
         super();
@@ -34,9 +35,8 @@ public class MainView {
         menu.add(toolsMenu());
 
         frame.setJMenuBar(menu);
-        JScrollPane scrollPane = new JScrollPane(tableStudents);
-
-        frame.add(scrollPane);
+        TablePanel tablepanel = new TablePanel(Student.students);
+        frame.getContentPane().add(tablepanel);
         frame.pack();
         frame.setName(name);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,10 +49,14 @@ public class MainView {
         fileMenu.add(newFile);
         openFile = new JMenuItem("Open");
         fileMenu.add(openFile);
+        saveFile = new JMenuItem("Save");
+        fileMenu.add(saveFile);
         exitFrame = new JMenuItem("Exit");
         fileMenu.add(exitFrame);
 
         newFile.addActionListener(new NewFileListener());
+        saveFile.addActionListener(new SaveFileListener(theParser));
+        openFile.addActionListener(new OpenFileListener(theParser));
         exitFrame.addActionListener(new ExitFrameListener());
 
         return fileMenu;

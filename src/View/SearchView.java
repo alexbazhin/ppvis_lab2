@@ -1,8 +1,6 @@
 package View;
 
-import Controller.OkSearch;
 import Model.Student;
-
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionEvent;
@@ -27,16 +25,16 @@ public class SearchView {
     public JDialog createFrame(String name) {
         JDialog dialog = new JDialog();
         Box mainBox = Box.createVerticalBox();
-        Box nameAndBirth = Box.createHorizontalBox();
-        Box enteringAndGraduate = Box.createHorizontalBox();
+        Box groupBox = Box.createHorizontalBox();
+        Box omissionsBox = Box.createHorizontalBox();
 
-        nameAndBirth.add(name());
-        nameAndBirth.add(Box.createHorizontalStrut(6));
-        nameAndBirth.add(group());
+        groupBox.add(name());
+        groupBox.add(Box.createHorizontalStrut(6));
+        groupBox.add(group());
 
-        enteringAndGraduate.add(omissionsOtherCauses());
-        enteringAndGraduate.add(Box.createHorizontalStrut(6));
-        enteringAndGraduate.add(omissionsWithoutGoodReason());
+        omissionsBox.add(omissionsOtherCauses());
+        omissionsBox.add(Box.createHorizontalStrut(6));
+        omissionsBox.add(omissionsWithoutGoodReason());
 
         JButton ok = new JButton("OK");
         ok.setAlignmentX(JComponent.CENTER_ALIGNMENT);
@@ -44,7 +42,13 @@ public class SearchView {
         ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //new OkSearch().searchStudent(getFullName(), getGroup(), (String) omissionsComboBox.getSelectedItem(), tableStudents, (Integer) lowerLimit.getSelectedItem(), (Integer) upperLimit.getSelectedItem());
+               /* tableStudents.clearSelection();
+               List<Integer> list = new OkSearch().searchStudent(getFullName(), getGroup(),
+               (String) omissionsComboBox.getSelectedItem(), tableStudents, lowerLimit.getText(),
+               upperLimit.getText(), tableModel);
+               for (int i=0; i<list.size(); i++) {
+                   tableStudents.addRowSelectionInterval(list.get(i), list.get(i));
+               }*/
                 String name = getFullName();
                 String group = getGroup();
                 String typeOmissions = (String) omissionsComboBox.getSelectedItem();
@@ -53,13 +57,16 @@ public class SearchView {
                 if (name != null && group != null) {
                     tableStudents.clearSelection();
                     for (int i=0; i<tableStudents.getRowCount(); i++) {
-                        if (name.equals(tableStudents.getValueAt(i, 0)) && group.equals(tableStudents.getValueAt(i, 1))) {
+                        if (name.equals(tableStudents.getValueAt(i, 0)) &&
+                                group.equals(tableStudents.getValueAt(i, 1))) {
                             tableStudents.addRowSelectionInterval(i, i);
                         }
                     }
                 }
 
-                if (name != null && (group == null || group.equals("")) && !typeOmissions.equals("Выберите вид пропуска") && Integer.parseInt(lowerLimit.getText())==0 && Integer.parseInt(upperLimit.getText())==0) {
+                if (name != null && (group == null || group.equals("")) &&
+                        !typeOmissions.equals("Выберите вид пропуска") && Integer.parseInt(lowerLimit.getText())==0 &&
+                        Integer.parseInt(upperLimit.getText())==0) {
                     tableStudents.clearSelection();
                     if (typeOmissions.equals("Пропуски по болезни")) {column=2;}
                     if (typeOmissions.equals("Пропуски по другим причинам")) {column=3;}
@@ -73,7 +80,9 @@ public class SearchView {
                     }
                 }
 
-                if (name != null && lowerLimit.getText() != null && upperLimit.getText() != null && !typeOmissions.equals("Выберите вид пропуска") && Integer.parseInt(lowerLimit.getText())>=0 && Integer.parseInt(upperLimit.getText())>0) {
+                if (name != null && lowerLimit.getText() != null && upperLimit.getText() != null &&
+                        !typeOmissions.equals("Выберите вид пропуска") && Integer.parseInt(lowerLimit.getText())>=0 &&
+                        Integer.parseInt(upperLimit.getText())>0) {
                     tableStudents.clearSelection();
 
                     if (typeOmissions.equals("Пропуски по болезни")) {column=2;}
@@ -97,14 +106,15 @@ public class SearchView {
             }
         });
 
-        mainBox.add(nameAndBirth);
+        mainBox.add(groupBox);
         mainBox.add(Box.createVerticalStrut(12));
         mainBox.add(omissions());
         mainBox.add(Box.createVerticalStrut(12));
-        mainBox.add(enteringAndGraduate);
+        mainBox.add(omissionsBox);
         mainBox.add(Box.createHorizontalStrut(12));
         JScrollPane scrollPane = new JScrollPane(tableStudents);
         mainBox.add(scrollPane);
+
         mainBox.add(ok);
         dialog.setContentPane(mainBox);
         dialog.pack();

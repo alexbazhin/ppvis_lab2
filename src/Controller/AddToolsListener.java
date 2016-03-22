@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
  * Created by Lion on 13.03.2016.
  */
 public class AddToolsListener implements ActionListener {
-
     @Override
     public void actionPerformed(ActionEvent e) {
         JDialog addView = new AddView().createFrame("PPVIS-2");

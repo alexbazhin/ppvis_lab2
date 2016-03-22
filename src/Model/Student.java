@@ -15,7 +15,8 @@ public class Student {
     String omissionsWithoutGoodReason;
     String omissions;
 
-    public Student(String fullName, String group, String omissionsDisease, String omissionsOtherCauses, String omissionsWithoutGoodReason, String omissions) {
+    public Student(String fullName, String group, String omissionsDisease, String omissionsOtherCauses,
+                   String omissionsWithoutGoodReason, String omissions) {
         this.fullName=fullName;
         this.group=group;
         this.omissionsDisease=omissionsDisease;

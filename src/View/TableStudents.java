@@ -2,9 +2,7 @@ package View;
 
 
 import Model.Student;
-
 import javax.swing.table.AbstractTableModel;
-
 import java.util.List;
 
 

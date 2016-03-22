@@ -6,7 +6,6 @@ import javax.swing.border.TitledBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 public class AddView extends JFrame {
 
     public JTextField nameOfStudentField;
@@ -22,32 +21,33 @@ public class AddView extends JFrame {
     public JDialog createFrame(String name) {
         JDialog dialog = new JDialog();
         Box mainBox = Box.createVerticalBox();
-        Box nameAndBirth = Box.createHorizontalBox();
-        Box enteringAndGraduate = Box.createHorizontalBox();
+        Box groupBox = Box.createHorizontalBox();
+        Box omissionsWithoutGoodReasonBox = Box.createHorizontalBox();
 
-        nameAndBirth.add(name());
-        nameAndBirth.add(Box.createHorizontalStrut(6));
-        nameAndBirth.add(group());
+        groupBox.add(name());
+        groupBox.add(Box.createHorizontalStrut(6));
+        groupBox.add(group());
 
-        enteringAndGraduate.add(omissionsOtherCauses());
-        enteringAndGraduate.add(Box.createHorizontalStrut(6));
-        enteringAndGraduate.add(omissionsWithoutGoodReason());
+        omissionsWithoutGoodReasonBox.add(omissionsOtherCauses());
+        omissionsWithoutGoodReasonBox.add(Box.createHorizontalStrut(6));
+        omissionsWithoutGoodReasonBox.add(omissionsWithoutGoodReason());
 
         JButton ok = new JButton("OK");
         ok.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new OkAdd().addStudent(getFullName(), getGroup(), getOmissionsDisease(), getOmissionsOtherCauses(), getOmissionsWithoutGoodReason());
+                new OkAdd().addStudent(getFullName(), getGroup(), getOmissionsDisease(), getOmissionsOtherCauses(),
+                        getOmissionsWithoutGoodReason());
             }
         });
 
-        mainBox.add(nameAndBirth);
+        mainBox.add(groupBox);
         mainBox.add(Box.createVerticalStrut(12));
         mainBox.add(Box.createVerticalStrut(12));
         mainBox.add(omissionsDisease());
         mainBox.add(Box.createVerticalStrut(12));
-        mainBox.add(enteringAndGraduate);
+        mainBox.add(omissionsWithoutGoodReasonBox);
         mainBox.add(Box.createHorizontalStrut(12));
         mainBox.add(ok);
         dialog.setContentPane(mainBox);

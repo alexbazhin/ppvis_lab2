@@ -1,11 +1,11 @@
 package View;
 
 import Model.Student;
-
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 
 public class DeleteView {
 
@@ -26,40 +26,43 @@ public class DeleteView {
     public JDialog createFrame(String name) {
         JDialog dialog = new JDialog();
         Box mainBox = Box.createVerticalBox();
-        Box nameAndBirth = Box.createHorizontalBox();
-        Box enteringAndGraduate = Box.createHorizontalBox();
+        Box groupBox = Box.createHorizontalBox();
+        Box omissionsWithoutGoodReasonBox = Box.createHorizontalBox();
 
-        nameAndBirth.add(name());
-        nameAndBirth.add(Box.createHorizontalStrut(6));
-        nameAndBirth.add(group());
+        groupBox.add(name());
+        groupBox.add(Box.createHorizontalStrut(6));
+        groupBox.add(group());
 
-        enteringAndGraduate.add(omissionsOtherCauses());
-        enteringAndGraduate.add(Box.createHorizontalStrut(6));
-        enteringAndGraduate.add(omissionsWithoutGoodReason());
+        omissionsWithoutGoodReasonBox.add(omissionsOtherCauses());
+        omissionsWithoutGoodReasonBox.add(Box.createHorizontalStrut(6));
+        omissionsWithoutGoodReasonBox.add(omissionsWithoutGoodReason());
 
         JButton ok = new JButton("OK");
         ok.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //new OkDelete(getName(), getGroup(), (String) omissionsComboBox.getSelectedItem(), tableStudents,
+                // tableModel, lowerLimit.getText(), upperLimit.getText()).deleteStudent();
                 String name = getName();
                 String group = getGroup();
 
                 String typeOmissions = (String) omissionsComboBox.getSelectedItem();
 
                 int column=0;
+                Iterator<Student> iter = Student.students.iterator();
                 if (name != null && group != null) {
-                    TableStudents model = new TableStudents(Student.students);
-                    for (int i=0; i<tableStudents.getRowCount(); i++) {
-                        if (name.equals(tableStudents.getValueAt(i, 0)) && group.equals(tableStudents.getValueAt(i, 1))) {
-                            model.removeRow(i);
-                            //tableStudents = new JTable(model);
-                        }
+                    while (iter.hasNext()) {
+                        Student s = iter.next();
+                            if (name.equals(s.getFullName()) && group.equals(s.getGroup())) {
+                                iter.remove();
+                            }
                     }
-
                 }
 
-                if (name != null && (group == null || group.equals("")) && !typeOmissions.equals("Выберите вид пропуска") && Integer.parseInt(lowerLimit.getText())==0 && Integer.parseInt(upperLimit.getText())==0) {
+                if (name != null && (group == null || group.equals("")) &&
+                        !typeOmissions.equals("Выберите вид пропуска") && Integer.parseInt(lowerLimit.getText())==0 &&
+                        Integer.parseInt(upperLimit.getText())==0) {
 
                     if (typeOmissions.equals("Пропуски по болезни")) {column=2;}
                     if (typeOmissions.equals("Пропуски по другим причинам")) {column=3;}
@@ -68,14 +71,14 @@ public class DeleteView {
                     for (int i=0; i<tableStudents.getRowCount(); i++) {
                         int value = Integer.parseInt(tableModel.getValueAt(i, column));
                         if (name.equals(tableStudents.getValueAt(i, 0)) && value > 0) {
-                            TableStudents model = new TableStudents(Student.students);
-                            model.removeRow(i);
-                            tableStudents = new JTable(model);
+                            Student.students.remove(i);
                         }
                     }
                 }
 
-                if (name != null && lowerLimit.getText()!=null && upperLimit.getText()!=null && (group == null || group.equals("")) && Integer.parseInt(lowerLimit.getText())>=0 && Integer.parseInt(upperLimit.getText())>0) {
+                if (name != null && lowerLimit.getText()!=null && upperLimit.getText()!=null && (group == null ||
+                        group.equals("")) && Integer.parseInt(lowerLimit.getText())>=0 &&
+                        Integer.parseInt(upperLimit.getText())>0) {
 
                     if (typeOmissions.equals("Пропуски по болезни")) {column=2;}
                     if (typeOmissions.equals("Пропуски по другим причинам")) {column=3;}
@@ -88,9 +91,7 @@ public class DeleteView {
                         if (name.equals(tableStudents.getValueAt(i, 0))) {
                             int value = Integer.parseInt(tableModel.getValueAt(i, column));
                             if (value>lowerLim && value<=upperLim) {
-                                TableStudents model = new TableStudents(Student.students);
-                                model.removeRow(i);
-                                tableStudents = new JTable(model);
+                                Student.students.remove(i);
                             }
                         }
                     }
@@ -98,11 +99,11 @@ public class DeleteView {
             }
         });
 
-        mainBox.add(nameAndBirth);
+        mainBox.add(groupBox);
         mainBox.add(Box.createVerticalStrut(12));
         mainBox.add(omissions());
         mainBox.add(Box.createVerticalStrut(12));
-        mainBox.add(enteringAndGraduate);
+        mainBox.add(omissionsWithoutGoodReasonBox);
         mainBox.add(Box.createHorizontalStrut(12));
         JScrollPane scrollPane = new JScrollPane(tableStudents);
 
@@ -169,9 +170,4 @@ public class DeleteView {
     public String getGroup() {
         return numberOfGroupField.getText();
     }
-
-    public String getOmissionsDisease() {
-        return omissionsDiseaseField.getText();
-    }
-
 }
