@@ -25,9 +25,8 @@ public class Parser {
                 XMLOutputFactory output = XMLOutputFactory.newInstance();
                 XMLStreamWriter writer = output.createXMLStreamWriter
                         (new FileWriter(fc.getSelectedFile() + "." + "xml"));
-
                 writer.writeStartDocument("UTF-8", "1.0");
-                System.out.println(Student.students.get(0).getFullName());
+
                 writer.writeStartElement("students");
 
                 for (Student student : Student.students) {
@@ -57,12 +56,12 @@ public class Parser {
             String fileName = fc.getSelectedFile().getPath();
 
             try {
-                String fullName;
-                String group;
-                String omissionsDisease;
-                String omissionsOtherCauses;
-                String omissionsWithoutGoodReason;
-                String omissions;
+                String fullName="";
+                String group="";
+                String omissionsDisease="";
+                String omissionsOtherCauses="";
+                String omissionsWithoutGoodReason="";
+                String omissions="";
 
                 XMLStreamReader xmlr = XMLInputFactory.newInstance()
                         .createXMLStreamReader(fileName, new FileInputStream(fileName));
@@ -82,6 +81,8 @@ public class Parser {
                         }
                     } else if (xmlr.isEndElement()) {
                         if (xmlr.getLocalName().equals("student")) {
+                            Student.students.add(new Student(fullName, group, omissionsDisease,
+                                    omissionsOtherCauses, omissionsWithoutGoodReason, omissions));
                         }
                     }
                 }

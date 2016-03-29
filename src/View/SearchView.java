@@ -1,10 +1,14 @@
 package View;
 
+import Controller.SearchingNameGroup;
+import Controller.SearchingType;
 import Model.Student;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchView {
 
@@ -14,9 +18,11 @@ public class SearchView {
     JTextField lowerLimit;
 
     JTextField numberOfGroupField;
-    TableStudents tableModel = new TableStudents(Student.students);
+    //TableStudents tableModel = new TableStudents(Student.students);
+    List<Student> resultOfSearchStudent = new ArrayList<>();
+    TablePanel tablepanel = new TablePanel(Student.students);
 
-    JTable tableStudents = new JTable(tableModel);
+    //JTable tableStudents = new JTable(tableModel);
 
     public SearchView() {
         super();
@@ -55,54 +61,47 @@ public class SearchView {
                 int column=0;
 
                 if (name != null && group != null) {
-                    tableStudents.clearSelection();
-                    for (int i=0; i<tableStudents.getRowCount(); i++) {
-                        if (name.equals(tableStudents.getValueAt(i, 0)) &&
-                                group.equals(tableStudents.getValueAt(i, 1))) {
-                            tableStudents.addRowSelectionInterval(i, i);
-                        }
-                    }
+                    resultOfSearchStudent = new SearchingNameGroup().search(name, group, typeOmissions, lowerLimit.getText(), upperLimit.getText());
                 }
 
                 if (name != null && (group == null || group.equals("")) &&
                         !typeOmissions.equals("Выберите вид пропуска") && Integer.parseInt(lowerLimit.getText())==0 &&
                         Integer.parseInt(upperLimit.getText())==0) {
-                    tableStudents.clearSelection();
-                    if (typeOmissions.equals("Пропуски по болезни")) {column=2;}
-                    if (typeOmissions.equals("Пропуски по другим причинам")) {column=3;}
-                    if (typeOmissions.equals("Пропуски без уважительной причины")) {column=4;}
+                    resultOfSearchStudent = new SearchingType().search(name, group, typeOmissions, lowerLimit.getText(), upperLimit.getText());
 
-                    for (int i=0; i<tableModel.getRowCount(); i++) {
-                        int value = Integer.parseInt(tableModel.getValueAt(i, column));
-                        if (name.equals(tableModel.getValueAt(i, 0)) && value>0) {
-                            tableStudents.addRowSelectionInterval(i, i);
-                        }
-                    }
                 }
 
                 if (name != null && lowerLimit.getText() != null && upperLimit.getText() != null &&
                         !typeOmissions.equals("Выберите вид пропуска") && Integer.parseInt(lowerLimit.getText())>=0 &&
                         Integer.parseInt(upperLimit.getText())>0) {
-                    tableStudents.clearSelection();
 
                     if (typeOmissions.equals("Пропуски по болезни")) {column=2;}
                     if (typeOmissions.equals("Пропуски по другим причинам")) {column=3;}
                     if (typeOmissions.equals("Пропуски без уважительной причины")) {column=4;}
 
-                    System.out.println(column);
-
                     int lowerLim = Integer.parseInt(lowerLimit.getText());
                     int upperLim = Integer.parseInt(upperLimit.getText());
 
-                    for (int i=0; i<tableStudents.getRowCount(); i++) {
-                        if (name.equals(tableStudents.getValueAt(i, 0))) {
-                            int value = Integer.parseInt(tableModel.getValueAt(i, column));
+                    for (int i=0; i<Student.students.size(); i++) {
+                        if (name.equals(Student.students.get(i).getFullName())) {
+                            int value=0;
+                            if (column==2) {
+                                value = Integer.parseInt(Student.students.get(i).getOmissionsDisease());
+                            }
+                            if (column==3) {
+                                value = Integer.parseInt(Student.students.get(i).getOmissionsOtherCauses());
+                            }
+                            if (column==4) {
+                                value = Integer.parseInt(Student.students.get(i).getOmissionsWithoutGoodReason());
+                            }
                             if (value>lowerLim && value<=upperLim) {
-                                tableStudents.addRowSelectionInterval(i, i);
+                                resultOfSearchStudent.add(Student.students.get(i));
                             }
                         }
                     }
                 }
+                tablepanel.setStudents(resultOfSearchStudent);
+                tablepanel.updateTable();
             }
         });
 
@@ -112,10 +111,28 @@ public class SearchView {
         mainBox.add(Box.createVerticalStrut(12));
         mainBox.add(omissionsBox);
         mainBox.add(Box.createHorizontalStrut(12));
-        JScrollPane scrollPane = new JScrollPane(tableStudents);
-        mainBox.add(scrollPane);
+        //JScrollPane scrollPane = new JScrollPane(tableStudents);
+        mainBox.add(tablepanel);
 
-        mainBox.add(ok);
+        JButton cancel = new JButton("Cancel");
+        cancel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tablepanel.setStudents(Student.students);
+                tablepanel.updateTable();
+            }
+        });
+
+        Box groupBox1 = Box.createHorizontalBox();
+        groupBox1.add(ok);
+        groupBox1.add(Box.createHorizontalStrut(6));
+        groupBox1.add(cancel);
+        mainBox.add(Box.createVerticalStrut(12));
+
+        mainBox.add(groupBox1);
+        mainBox.add(Box.createVerticalStrut(12));
+
         dialog.setContentPane(mainBox);
         dialog.pack();
         dialog.setName(name);

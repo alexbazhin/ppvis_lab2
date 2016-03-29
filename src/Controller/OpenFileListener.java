@@ -1,5 +1,7 @@
 package Controller;
 
+import View.MainView;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,5 +16,6 @@ public class OpenFileListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         parser.openFile();
+        MainView.tablepanel.updateTable();
     }
 }

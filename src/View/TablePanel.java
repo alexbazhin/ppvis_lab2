@@ -53,6 +53,30 @@ public class TablePanel extends JPanel {
         return table;
     }
 
+    public JPanel makeTablePanel(){
+        JPanel table = new JPanel();
+        table.setLayout(new GridBagLayout());
+        int numberExaminations = 10;
+       // List<Student> students = tableModel.getStudents();
+        AddComponent.add(table, "Full Name", 0, 1, 1, 3);
+        AddComponent.add(table, "Group", 1, 1, 1, 3);
+        AddComponent.add(table, "Examinations", 2, 1, 10 * 2, 1);
+        for (int i = 0, x = 2; i < numberExaminations; i++, x += 2) {
+            AddComponent.add(table, Integer.toString(i + 1), x, 2, 2, 1);
+            AddComponent.add(table, "name", x, 3, 1, 1);
+            AddComponent.add(table, "mark", x + 1, 3, 1, 1);
+        }
+        int firstStudentOnPage = countStudentsOnPage * (currentPage - 1);
+        for (int y = 4, student = firstStudentOnPage; y < countStudentsOnPage + 4 && student < students.size(); y++, student++) {
+            //tableModel.setNumberMaxExaminations(students.get(student).getExaminations().size());
+            for (int i = 0; i < numberExaminations * 2 + 2; i++) {
+               // String write = students.get(student).getField(i);
+               // AddComponent.add(table, write, i, y, 1, 1);
+            }
+        }
+        return table;
+    }
+
     private JPanel makeToolBar() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
@@ -123,6 +147,10 @@ public class TablePanel extends JPanel {
 
     private int getNumberMaxPage() {
         return ((students.size() - 1) / countStudentsOnPage) + 1;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 
     public void updateTable() {

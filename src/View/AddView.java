@@ -39,6 +39,8 @@ public class AddView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 new OkAdd().addStudent(getFullName(), getGroup(), getOmissionsDisease(), getOmissionsOtherCauses(),
                         getOmissionsWithoutGoodReason());
+                MainView.tablepanel.updateTable();
+
             }
         });
 

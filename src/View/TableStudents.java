@@ -14,6 +14,11 @@ public class TableStudents extends AbstractTableModel {
         super();
         this.students = students;
     }
+
+    public void add(Student student) {
+        students.add(student);
+
+    }
     public void model(List<Student> students) {
         this.students=students;
     }

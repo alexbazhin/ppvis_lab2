@@ -22,6 +22,7 @@ public class MainView {
     JMenuItem addTools;
     JTable tableStudents = new JTable(new TableStudents(Student.students));
     Parser theParser = new Parser(Student.students, tableStudents);
+    public static TablePanel tablepanel;
 
     public MainView() {
         super();
@@ -33,9 +34,11 @@ public class MainView {
         menu = new JMenuBar();
         menu.add(fileMenu());
         menu.add(toolsMenu());
-
+        Box box = Box.createHorizontalBox();
         frame.setJMenuBar(menu);
-        TablePanel tablepanel = new TablePanel(Student.students);
+        tablepanel = new TablePanel(Student.students);
+        box.add(tablepanel.makeTablePanel());
+        frame.getContentPane().add(box);
         frame.getContentPane().add(tablepanel);
         frame.pack();
         frame.setName(name);

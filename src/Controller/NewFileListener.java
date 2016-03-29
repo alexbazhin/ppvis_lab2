@@ -1,6 +1,8 @@
 package Controller;
 
 import Model.Student;
+import View.MainView;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
@@ -16,5 +18,6 @@ public class NewFileListener implements ActionListener {
             Student s = iter.next();
             iter.remove();
         }
+        MainView.tablepanel.updateTable();
     }
 }

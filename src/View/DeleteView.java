@@ -5,7 +5,9 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
+import java.util.ArrayList;
+
+import java.util.List;
 
 public class DeleteView {
 
@@ -13,7 +15,7 @@ public class DeleteView {
     JComboBox omissionsComboBox;
     JTextField upperLimit;
     JTextField lowerLimit;
-    JTextField omissionsDiseaseField;
+    List<String> deleteStudent = new ArrayList<>();
     JTextField numberOfGroupField;
     TableStudents tableModel = new TableStudents(Student.students);
 
@@ -50,13 +52,14 @@ public class DeleteView {
                 String typeOmissions = (String) omissionsComboBox.getSelectedItem();
 
                 int column=0;
-                Iterator<Student> iter = Student.students.iterator();
+
                 if (name != null && group != null) {
-                    while (iter.hasNext()) {
-                        Student s = iter.next();
-                            if (name.equals(s.getFullName()) && group.equals(s.getGroup())) {
-                                iter.remove();
-                            }
+                    for (int i=0; i<tableStudents.getRowCount(); i++) {
+                        if (name.equals(tableStudents.getValueAt(i, 0)) &&
+                                group.equals(tableStudents.getValueAt(i, 1))) {
+                            deleteStudent.add(Student.students.get(i).getFullName());
+                            Student.students.remove(i);
+                        }
                     }
                 }
 
@@ -71,6 +74,7 @@ public class DeleteView {
                     for (int i=0; i<tableStudents.getRowCount(); i++) {
                         int value = Integer.parseInt(tableModel.getValueAt(i, column));
                         if (name.equals(tableStudents.getValueAt(i, 0)) && value > 0) {
+                            deleteStudent.add(Student.students.get(i).getFullName());
                             Student.students.remove(i);
                         }
                     }
@@ -91,11 +95,25 @@ public class DeleteView {
                         if (name.equals(tableStudents.getValueAt(i, 0))) {
                             int value = Integer.parseInt(tableModel.getValueAt(i, column));
                             if (value>lowerLim && value<=upperLim) {
+                                deleteStudent.add(Student.students.get(i).getFullName());
                                 Student.students.remove(i);
                             }
                         }
                     }
                 }
+                String output="";
+                for (String s : deleteStudent) {
+                    output+=s+"\n";
+                }
+                if (output.equals("")) {
+                    JOptionPane.showMessageDialog(null, "По данному запросу студентов не найдено");
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Удален(ы)\n"+output);
+                }
+
+                MainView.tablepanel.updateTable();
+
             }
         });
 
@@ -105,9 +123,9 @@ public class DeleteView {
         mainBox.add(Box.createVerticalStrut(12));
         mainBox.add(omissionsWithoutGoodReasonBox);
         mainBox.add(Box.createHorizontalStrut(12));
-        JScrollPane scrollPane = new JScrollPane(tableStudents);
 
-        mainBox.add(scrollPane);
+
+
         mainBox.add(ok);
 
         dialog.setContentPane(mainBox);
