@@ -44,8 +44,6 @@ public class DeleteView {
         ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //new OkDelete(getName(), getGroup(), (String) omissionsComboBox.getSelectedItem(), tableStudents,
-                // tableModel, lowerLimit.getText(), upperLimit.getText()).deleteStudent();
                 String name = getName();
                 String group = getGroup();
 
@@ -123,8 +121,6 @@ public class DeleteView {
         mainBox.add(Box.createVerticalStrut(12));
         mainBox.add(omissionsWithoutGoodReasonBox);
         mainBox.add(Box.createHorizontalStrut(12));
-
-
 
         mainBox.add(ok);
 

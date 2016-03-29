@@ -2,7 +2,9 @@ package View;
 
 import Controller.SearchingNameGroup;
 import Controller.SearchingType;
+import Controller.SearchingTypeAndQuantity;
 import Model.Student;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionEvent;
@@ -48,60 +50,35 @@ public class SearchView {
         ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               /* tableStudents.clearSelection();
-               List<Integer> list = new OkSearch().searchStudent(getFullName(), getGroup(),
-               (String) omissionsComboBox.getSelectedItem(), tableStudents, lowerLimit.getText(),
-               upperLimit.getText(), tableModel);
-               for (int i=0; i<list.size(); i++) {
-                   tableStudents.addRowSelectionInterval(list.get(i), list.get(i));
-               }*/
                 String name = getFullName();
                 String group = getGroup();
                 String typeOmissions = (String) omissionsComboBox.getSelectedItem();
-                int column=0;
+                int column = 0;
 
                 if (name != null && group != null) {
                     resultOfSearchStudent = new SearchingNameGroup().search(name, group, typeOmissions, lowerLimit.getText(), upperLimit.getText());
                 }
 
                 if (name != null && (group == null || group.equals("")) &&
-                        !typeOmissions.equals("Выберите вид пропуска") && Integer.parseInt(lowerLimit.getText())==0 &&
-                        Integer.parseInt(upperLimit.getText())==0) {
+                        !typeOmissions.equals("Выберите вид пропуска") && Integer.parseInt(lowerLimit.getText()) == 0 &&
+                        Integer.parseInt(upperLimit.getText()) == 0) {
                     resultOfSearchStudent = new SearchingType().search(name, group, typeOmissions, lowerLimit.getText(), upperLimit.getText());
-
                 }
 
                 if (name != null && lowerLimit.getText() != null && upperLimit.getText() != null &&
-                        !typeOmissions.equals("Выберите вид пропуска") && Integer.parseInt(lowerLimit.getText())>=0 &&
-                        Integer.parseInt(upperLimit.getText())>0) {
-
-                    if (typeOmissions.equals("Пропуски по болезни")) {column=2;}
-                    if (typeOmissions.equals("Пропуски по другим причинам")) {column=3;}
-                    if (typeOmissions.equals("Пропуски без уважительной причины")) {column=4;}
-
-                    int lowerLim = Integer.parseInt(lowerLimit.getText());
-                    int upperLim = Integer.parseInt(upperLimit.getText());
-
-                    for (int i=0; i<Student.students.size(); i++) {
-                        if (name.equals(Student.students.get(i).getFullName())) {
-                            int value=0;
-                            if (column==2) {
-                                value = Integer.parseInt(Student.students.get(i).getOmissionsDisease());
-                            }
-                            if (column==3) {
-                                value = Integer.parseInt(Student.students.get(i).getOmissionsOtherCauses());
-                            }
-                            if (column==4) {
-                                value = Integer.parseInt(Student.students.get(i).getOmissionsWithoutGoodReason());
-                            }
-                            if (value>lowerLim && value<=upperLim) {
-                                resultOfSearchStudent.add(Student.students.get(i));
-                            }
-                        }
-                    }
+                        !typeOmissions.equals("Выберите вид пропуска") && Integer.parseInt(lowerLimit.getText()) >= 0 &&
+                        Integer.parseInt(upperLimit.getText()) > 0) {
+                    resultOfSearchStudent = new SearchingTypeAndQuantity().search(name, group, typeOmissions, lowerLimit.getText(), upperLimit.getText());
                 }
-                tablepanel.setStudents(resultOfSearchStudent);
-                tablepanel.updateTable();
+                if (resultOfSearchStudent.size() == 0) {
+                    JOptionPane.showMessageDialog(null, "Никого не найдено");
+                    tablepanel.setStudents(Student.students);
+                    tablepanel.updateTable();
+                }
+                else {
+                    tablepanel.setStudents(resultOfSearchStudent);
+                    tablepanel.updateTable();
+                }
             }
         });
 
@@ -111,7 +88,6 @@ public class SearchView {
         mainBox.add(Box.createVerticalStrut(12));
         mainBox.add(omissionsBox);
         mainBox.add(Box.createHorizontalStrut(12));
-        //JScrollPane scrollPane = new JScrollPane(tableStudents);
         mainBox.add(tablepanel);
 
         JButton cancel = new JButton("Cancel");

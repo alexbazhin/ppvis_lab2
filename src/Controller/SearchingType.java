@@ -16,20 +16,16 @@ public class SearchingType extends Searching {
         List<Student> resultOfSearchStudent = new ArrayList<>();
 
             for (int i=0; i < Student.students.size(); i++) {
-                System.out.println(name);
-                if (name.equals(Student.students.get(i).getFullName()) && typeOmissions.equals("Пропуски по болезни") && !Student.students.get(i).getOmissionsDisease().equals("0")) {
-                    System.out.println(Student.students.get(i).getOmissionsDisease());
+                if (name.equals(Student.students.get(i).getFullName()) && typeOmissions.equals("РџСЂРѕРїСѓСЃРєРё РїРѕ Р±РѕР»РµР·РЅРё") && !Student.students.get(i).getOmissionsDisease().equals("0")) {
                     resultOfSearchStudent.add(Student.students.get(i));
                 }
-                if (name.equals(Student.students.get(i).getFullName()) && typeOmissions.equals("Пропуски по другим причинам") && !Student.students.get(i).getOmissionsOtherCauses().equals("0")) {
-                    //System.out.println(Student.students.get(i).getOmissionsDisease());
+                if (name.equals(Student.students.get(i).getFullName()) && typeOmissions.equals("РџСЂРѕРїСѓСЃРєРё РїРѕ РґСЂСѓРіРёРј РїСЂРёС‡РёРЅР°Рј") && !Student.students.get(i).getOmissionsOtherCauses().equals("0")) {
                     resultOfSearchStudent.add(Student.students.get(i));
                 }
-                if (name.equals(Student.students.get(i).getFullName()) && typeOmissions.equals("Пропуски без уважительной причины") && !Student.students.get(i).getOmissionsWithoutGoodReason().equals("0")) {
+                if (name.equals(Student.students.get(i).getFullName()) && typeOmissions.equals("РџСЂРѕРїСѓСЃРєРё Р±РµР· СѓРІР°Р¶РёС‚РµР»СЊРЅРѕР№ РїСЂРёС‡РёРЅС‹") && !Student.students.get(i).getOmissionsWithoutGoodReason().equals("0")) {
                     resultOfSearchStudent.add(Student.students.get(i));
                 }
             }
-
         return resultOfSearchStudent;
     }
 }

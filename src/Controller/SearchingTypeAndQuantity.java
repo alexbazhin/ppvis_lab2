@@ -15,9 +15,9 @@ public class SearchingTypeAndQuantity extends Searching {
         int column=0;
         List<Student> resultOfSearchStudent = new ArrayList<>();
 
-            if (typeOmissions.equals("Пропуски по болезни")) {column=2;}
-            if (typeOmissions.equals("Пропуски по другим причинам")) {column=3;}
-            if (typeOmissions.equals("Пропуски без уважительной причины")) {column=4;}
+            if (typeOmissions.equals("РџСЂРѕРїСѓСЃРєРё РїРѕ Р±РѕР»РµР·РЅРё")) {column=2;}
+            if (typeOmissions.equals("РџСЂРѕРїСѓСЃРєРё РїРѕ РґСЂСѓРіРёРј РїСЂРёС‡РёРЅР°Рј")) {column=3;}
+            if (typeOmissions.equals("РџСЂРѕРїСѓСЃРєРё Р±РµР· СѓРІР°Р¶РёС‚РµР»СЊРЅРѕР№ РїСЂРёС‡РёРЅС‹")) {column=4;}
 
             int lowerLim = Integer.parseInt(lower);
             int upperLim = Integer.parseInt(upper);
